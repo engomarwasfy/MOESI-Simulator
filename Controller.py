@@ -1,7 +1,7 @@
 import time
 
-from Bus import Bus
-from Cache import Cache
+from models.Bus import Bus
+from models.Cache import Cache
 
 
 class Controller:

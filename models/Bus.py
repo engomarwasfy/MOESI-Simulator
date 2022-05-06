@@ -1,7 +1,7 @@
 import threading
 import time
 
-from Memory import *
+from models.Memory import Memory
 
 
 class Bus:

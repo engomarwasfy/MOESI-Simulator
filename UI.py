@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 
-from Bus import *
+from models.Bus import *
 from CPU import *
 import util.InstructionGenerator as Gen
 from util.Util import *

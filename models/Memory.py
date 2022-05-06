@@ -1,4 +1,4 @@
-from MemoryBlock import MemoryBlock
+from models.MemoryBlock import MemoryBlock
 
 
 class Memory:

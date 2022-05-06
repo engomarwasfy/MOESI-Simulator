@@ -1,5 +1,5 @@
-from CacheBlock import CacheBlock
-from InstructionGenerator import *
+from models.CacheBlock import CacheBlock
+from util.InstructionGenerator import *
 
 
 class Cache:
