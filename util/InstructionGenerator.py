@@ -18,22 +18,19 @@ def binomial_random(n, p):
 # Generates read instruction as string from address
 def generate_read(p_number, address):
     address = dec_to_bin(address)
-    result = "P" + str(p_number) + ": READ " + address
-    return result
+    return f"P{str(p_number)}: READ {address}"
 
 
 # Generates write instruction as string from address and data
 def generate_write(p_number, address, data):
     address = dec_to_bin(address)
     data = dec_to_hex(data)
-    result = "P" + str(p_number) + ": WRITE " + address + ";" + data
-    return result
+    return f"P{str(p_number)}: WRITE {address};{data}"
 
 
 # Generates calc instruction as string from processor
 def generate_calc(p_number):
-    result = "P" + str(p_number) + ": CALC"
-    return result
+    return f"P{str(p_number)}: CALC"
 
 
 # Generates random instruction for processor as string

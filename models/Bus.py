@@ -18,14 +18,15 @@ class Bus:
 
     # Find instances of CPUs that have a copy of desired address
     def find_copies(self, address, cpu_number):
-        result = []
+        result = [
+            cpu
+            for cpu in self.cpus
+            if cpu.number != cpu_number
+            and cpu.controller.find_data(address, boolean=True)
+        ]
 
-        for cpu in self.cpus:
-            # Don't include CPU that is making the update request. It already updated its own cache!
-            if cpu.number != cpu_number and cpu.controller.find_data(address, boolean=True):
-                result.append(cpu)
 
-        print("BUS: REQ FROM CPU " + str(cpu_number) + ": FOUND COPIES " + str(result))
+        print(f"BUS: REQ FROM CPU {str(cpu_number)}: FOUND COPIES {result}")
 
         return result
 
@@ -36,7 +37,10 @@ class Bus:
     # Bus reads a data from memory
     def read_from_mem(self, address, cpu_number):
         result = self.memory.read(address)
-        print("BUS: REQ FROM CPU " + str(cpu_number) + ": READING " + str(address) + " FROM MEMORY")
+        print(
+            f"BUS: REQ FROM CPU {str(cpu_number)}: READING {str(address)} FROM MEMORY"
+        )
+
 
         # Fake memory time penalty
         time.sleep(1)
@@ -67,7 +71,10 @@ class Bus:
     # Write to memory from bus
     def write_to_mem(self, address, data, cpu_number):
         self.memory.write(address, data)
-        print("BUS: REQ FROM CPU " + str(cpu_number) + ": WRITING " + str(data) + " TO ADDRESS " + str(address))
+        print(
+            f"BUS: REQ FROM CPU {str(cpu_number)}: WRITING {str(data)} TO ADDRESS {str(address)}"
+        )
+
 
         # Fake memory time penalty
         time.sleep(1)

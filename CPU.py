@@ -85,21 +85,21 @@ class CPU:
             operation = decoded_instr[0]
             if operation == "CALC":
                 # Do nothing
-                print("CPU " + str(self.number) + ": DECODED CALC")
+                print(f"CPU {str(self.number)}: DECODED CALC")
             elif operation == "READ":
                 # Call the controller READ operation
                 address = decoded_instr[1]
-                print("CPU " + str(self.number) + ": DECODED READ " + str(address))
+                print(f"CPU {str(self.number)}: DECODED READ {str(address)}")
                 self.controller.read(address)
             else:
                 # Call the controller WRITE operation
                 address = decoded_instr[1]
                 data = decoded_instr[2]
-                print("CPU " + str(self.number) + ": DECODED WRITE " + str(address) + " " + str(data))
+                print(f"CPU {str(self.number)}: DECODED WRITE {str(address)} {str(data)}")
                 self.controller.write(address, data)
             time.sleep(self.instr_time)
         else:
-            print("CPU: " + str(self.number) + ": ERROR DECODING " + str(instr))
+            print(f"CPU: {str(self.number)}: ERROR DECODING {str(instr)}")
             self.status = "Decoding error"
 
     # Main entry point to start CPU
@@ -114,7 +114,7 @@ class CPU:
 
             engine.start()
         else:
-            print("CPU " + str(self.number) + " is already running!")
+            print(f"CPU {str(self.number)} is already running!")
 
     def set_custom_instr(self, instr):
         self.custom_instr = instr
@@ -127,4 +127,4 @@ class CPU:
         if self.is_running:
             self.is_running = False
         else:
-            print("CPU " + str(self.number) + " is already stopped!")
+            print(f"CPU {str(self.number)} is already stopped!")
