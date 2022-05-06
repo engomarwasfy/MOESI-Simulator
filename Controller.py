@@ -21,29 +21,23 @@ class Controller:
         for a in a_list:
             if a.get_address() == address and a.get_state() != "I":
                 # Check if address matches and line not in invalid state
-                if boolean:
-                    # Boolean mode for bus checking copies
-                    result = True
-                else:
-                    result = a.get_data()
-
+                result = True if boolean else a.get_data()
         return result
 
     # Handle read operation
     def read(self, address):
-        cache_check = self.find_data(address, boolean=True)
-        if cache_check:
+        if cache_check := self.find_data(address, boolean=True):
             # READ HIT. Data was found on local blocks
-            print("CPU " + str(self.cpu_number) + ": READ HIT")
+            print(f"CPU {str(self.cpu_number)}: READ HIT")
             time.sleep(0.5)
         else:
             # READ MISS. Call bus to get data from somewhere else
-            print("CPU " + str(self.cpu_number) + ": READ MISS. PROBING...")
+            print(f"CPU {str(self.cpu_number)}: READ MISS. PROBING...")
             self.bus.lock_bus()
             cpus_with_copy = self.bus.find_copies(address, self.cpu_number)
             if len(cpus_with_copy) != 0:
                 # READ HIT ON PROBE
-                print("CPU " + str(self.cpu_number) + ": READ HIT ON PROBE")
+                print(f"CPU {str(self.cpu_number)}: READ HIT ON PROBE")
                 cpu = cpus_with_copy[0]
                 data = cpu.controller.find_data(address)
                 old_info = self.cache.write(address, data, "S")
@@ -52,7 +46,7 @@ class Controller:
                 self.bus.update(address, cpus_with_copy, "RHP", self.cpu_number)
             else:
                 # READ MISS ON PROBE. READ FROM MEMORY
-                print("CPU " + str(self.cpu_number) + ": READ MISS ON PROBE. READ FROM MEMORY.")
+                print(f"CPU {str(self.cpu_number)}: READ MISS ON PROBE. READ FROM MEMORY.")
                 data = self.bus.read_from_mem(address, self.cpu_number)
                 old_info = self.cache.write(address, data, "E")
 
@@ -69,8 +63,7 @@ class Controller:
 
     # Handle write operation
     def write(self, address, data):
-        cache_check = self.find_data(address, boolean= True)
-        if cache_check:
+        if cache_check := self.find_data(address, boolean=True):
             state = self.cache.get_state_by_address(address)
             old_info = [-1]
 
@@ -84,7 +77,7 @@ class Controller:
                 # M stays in M. Just write
                 print("WRITE HIT")
                 old_info = self.cache.write(address, data, state)
-            elif state == "S" or state == "O":
+            elif state in ["S", "O"]:
                 print("WRITE MISS")
                 # S or O -> M. WRITE on local cache. Tell bus to change copies to I
                 state = "M"
@@ -100,8 +93,6 @@ class Controller:
             if old_address != address and old_state == "O" or old_state == "M":
                 # Only write back if state is O or M and expulsion is made
                 self.bus.write_to_mem(old_address, old_data, self.cpu_number)
-
-            self.bus.unlock_bus()
 
         else:
             # Address is not in local cache
@@ -123,4 +114,4 @@ class Controller:
             cpus_with_copy = self.bus.find_copies(address, self.cpu_number)
             self.bus.update(address, cpus_with_copy, "WM", self.cpu_number)
 
-            self.bus.unlock_bus()
+        self.bus.unlock_bus()

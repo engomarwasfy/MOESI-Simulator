@@ -7,7 +7,7 @@ def dec_to_bin(num):
 
     # Ensure that result is 3 bit binary string, as there are 7 possible memory positions (000 to 111)
     while len(result) < 3:
-        result = "0" + result
+        result = f"0{result}"
 
     return result
 
@@ -19,6 +19,6 @@ def dec_to_hex(num):
 
     # Ensure that result is 4 bit binary string, as there are 65535 possible data values to write (FFFF)
     while len(result) < 4:
-        result = "0" + result
+        result = f"0{result}"
 
     return result
